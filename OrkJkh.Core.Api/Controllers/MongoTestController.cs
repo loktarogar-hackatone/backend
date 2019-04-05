@@ -7,7 +7,7 @@ using MongoDB.Driver;
 
 namespace OrkJkh.Core.Api.Controllers
 {
-	[Route("api/mongotest]")]
+	[Route("api/mongotest")]
 	[ApiController]
 	public class MongoTestController : Controller
 	{
