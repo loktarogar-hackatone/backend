@@ -10,4 +10,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Dockerfile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dockerfile.cs" />
+  </ItemGroup>
 </Project>
