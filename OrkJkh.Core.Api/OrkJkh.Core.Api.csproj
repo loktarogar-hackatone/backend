@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="AspNetCore.Identity.Mongo" Version="5.1.0.15" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,5 +16,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Dockerfile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Services\Mongo\" />
   </ItemGroup>
 </Project>
