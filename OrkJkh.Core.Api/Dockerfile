@@ -15,5 +15,6 @@ RUN dotnet publish OrkJkh.Core.Api.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
+ENV ASPNETCORE_URLS http://0.0.0.0:5000
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "OrkJkh.Core.Api.dll"]
