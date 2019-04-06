@@ -4,14 +4,14 @@ EXPOSE 5000
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY OrkJkh.Core.Api.csproj .
-RUN dotnet restore OrkJkh.Core.Api.csproj
-WORKDIR /src/Api
 COPY . .
-RUN dotnet build OrkJkh.Core.Api.csproj -c Release -o /app
+RUN dotnet restore OrkJkh.Core.Api/OrkJkh.Core.Api.csproj
+# WORKDIR /src/Api
+# COPY . .
+RUN dotnet build OrkJkh.Core.Api/OrkJkh.Core.Api.csproj -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish OrkJkh.Core.Api.csproj -c Release -o /app
+RUN dotnet publish OrkJkh.Core.Api/OrkJkh.Core.Api.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
