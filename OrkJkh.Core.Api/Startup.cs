@@ -92,7 +92,13 @@ namespace OrkJkh.Core.Api
 			}
 
 			app.UseAuthentication();
-			app.UseCors();
+			app.UseCors(o => 
+			{
+				o.AllowAnyOrigin();
+				o.AllowAnyMethod();
+				o.AllowAnyHeader();	
+			});
+			
 			//app.UseHttpsRedirection();
 			app.UseMvc();
 		}
