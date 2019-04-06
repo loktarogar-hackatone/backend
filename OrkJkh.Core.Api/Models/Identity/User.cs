@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AspNetCore.Identity.Mongo;
 using AspNetCore.Identity.Mongo.Model;
 
@@ -13,7 +14,7 @@ namespace OrkJkh.Core.Api.Models.Identity
 
 		public string Appartament { get; set; }
 
-		public string BuildingId { get; set; }
+		public List<string> BuildingIds { get; set; }
 
 		public string Inn { get; set; }
 

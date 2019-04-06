@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using OrkJkh.Core.Api.Models.Identity;
 
@@ -9,7 +10,7 @@ namespace OrkJkh.Core.Api.Models.Api
 		public string FullName { get; set; }
 
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string BuildingId { get; set; }
+		public List<string> BuildingIds { get; set; }
 
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Appartament { get; set; }
@@ -30,7 +31,7 @@ namespace OrkJkh.Core.Api.Models.Api
 			Appartament = user.Appartament;
 			Phone = user.PhoneNumber;
 			Email = user.Email;
-			BuildingId = user.BuildingId;
+			BuildingIds = user.BuildingIds;
 			Inn = user.Inn;
 			UserType = user.UserType == UserEnum.B2C ? "B2C" : "B2B";
 		}

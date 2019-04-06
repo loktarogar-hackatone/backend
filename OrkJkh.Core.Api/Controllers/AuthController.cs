@@ -44,7 +44,12 @@ namespace OrkJkh.Core.Api.Controllers
 			user.UserName = request.Email;
 			user.PhoneNumber = request.Phone;
 			user.Appartament = request?.Appartament;
-			user.BuildingId = request?.BuildingId;
+
+			if (request.BuildingId != null)
+			{
+				user.BuildingIds = new List<string>();
+				user.BuildingIds.Add(request.BuildingId);
+			}
 
 			var result = await _userManager.CreateAsync(user, request.Password);
 			if (result.Succeeded)
