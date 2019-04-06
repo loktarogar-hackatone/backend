@@ -20,4 +20,16 @@ namespace OrkJkh.Core.Api.Models.Api
 
 		public string BuildingId { get; set; }
 	}
+
+	public class RegisterB2BRQ
+	{
+		[Required]
+		public string Inn { get; set; }
+
+		[Required]
+		public string Email { get; set; }
+
+		[Required]
+		public string Password { get; set; }
+	}
 }

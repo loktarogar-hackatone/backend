@@ -4,12 +4,12 @@ namespace OrkJkh.Core.Api.Models.Api
 	{
 		public string Token { get; set; }
 		
-		public string Name { get; set; }
+		public string Email { get; set; }
 
-		public RegisterB2CRS(string token, string name)
+		public RegisterB2CRS(string token, string email)
 		{
 			Token = token;
-			Name = name;
+			Email = email;
 		}
 	}
 }

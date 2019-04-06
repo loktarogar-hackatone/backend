@@ -36,7 +36,7 @@ namespace OrkJkh.Core.Api.Controllers
 
 		[HttpPost("register/b2c")]
 		[AllowAnonymous]
-		public async Task<IActionResult> Register([FromBody] RegisterB2CRQ request)
+		public async Task<IActionResult> RegisterB2C([FromBody] RegisterB2CRQ request)
 		{
 			var user = new AppUser();
 			user.Email = request.Email;
@@ -59,8 +59,30 @@ namespace OrkJkh.Core.Api.Controllers
 			return BadRequest();
 		}
 
+		[HttpPost("register/b2b")]
 		[AllowAnonymous]
-		[HttpPost("login/b2c")]
+		public async Task<IActionResult> RegisterB2B([FromBody] RegisterB2BRQ request)
+		{
+			var user = new AppUser();
+			user.Email = request.Email;
+			user.UserName = request.Email;
+			user.Inn = request.Inn;
+
+			var result = await _userManager.CreateAsync(user, request.Password);
+			if (result.Succeeded)
+			{
+				await _signInManager.SignInAsync(user, false);
+				var token = GenerateJSONWebToken(user);
+
+				var rootData = new { token, user.Inn, user.Email };
+				return Created("api/auth/register/b2b", rootData);
+			}
+
+			return BadRequest();
+		}
+
+		[AllowAnonymous]
+		[HttpPost("login")]
 		public async Task<IActionResult> Login([FromBody] LoginRQ request)
 		{
 			var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);

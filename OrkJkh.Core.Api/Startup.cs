@@ -41,6 +41,8 @@ namespace OrkJkh.Core.Api
 				conf.Password.RequiredLength = 4;
 				conf.Password.RequiredUniqueChars = 0;
 				conf.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
+
+				conf.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
 			},
 			opt =>
 			{

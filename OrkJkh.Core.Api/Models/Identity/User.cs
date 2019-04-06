@@ -15,6 +15,8 @@ namespace OrkJkh.Core.Api.Models.Identity
 
 		public string BuildingId { get; set; }
 
+		public string Inn { get; set; }
+
 		public UserEnum UserType { get; set; } = UserEnum.B2C;
 	}
 
