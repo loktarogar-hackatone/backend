@@ -9,15 +9,15 @@ namespace OrkJkh.Core.Api.Controllers
 {
 	[Route("api/mongotest")]
 	[ApiController]
-	public class MongoTestController : Controller
+	public class MongoTestController : ControllerBase
 	{
 		private readonly IMongoCollection<MongoTestDto> _collection;
 
 		public MongoTestController(IConfiguration config)
 		{
-			var client = new MongoClient(config.GetConnectionString("MongoConnectionString"));
+			var client = new MongoClient("mongodb://35.228.126.23:27017");
 			var database = client.GetDatabase("orkjkh");
-			_collection = database.GetCollection<MongoTestDto>("Books");
+			_collection = database.GetCollection<MongoTestDto>("items");
 		}
 
 		[HttpGet("insert")]
@@ -30,7 +30,7 @@ namespace OrkJkh.Core.Api.Controllers
 		[HttpGet("getall")]
 		public async Task<IActionResult> GetThemAll()
 		{
-			var data = await _collection.FindAsync(x => true);
+			var data = await _collection.Find(x => true).ToListAsync();
 			return Ok(data);
 		}
 	}

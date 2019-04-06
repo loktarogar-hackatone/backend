@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OrkJkh.Core.Api.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/values")]
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
 		// GET api/values
-		[HttpGet]
+		[HttpGet("getall")]
 		public ActionResult<IEnumerable<string>> Get()
 		{
 			return new string[] { "value1", "lol" };
