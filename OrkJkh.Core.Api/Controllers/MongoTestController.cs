@@ -15,7 +15,7 @@ namespace OrkJkh.Core.Api.Controllers
 
 		public MongoTestController(IConfiguration config)
 		{
-			var client = new MongoClient(config.GetConnectionString("mongodb://35.228.126.23:27017"));
+			var client = new MongoClient("mongodb://35.228.126.23:27017");
 			var database = client.GetDatabase("orkjkh");
 			_collection = database.GetCollection<MongoTestDto>("items");
 		}
