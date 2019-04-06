@@ -1,12 +1,12 @@
 namespace OrkJkh.Core.Api.Models.Api
 {
-	public class RegisterRS
+	public class RegisterB2CRS
 	{
 		public string Token { get; set; }
 		
 		public string Name { get; set; }
 
-		public RegisterRS(string token, string name)
+		public RegisterB2CRS(string token, string name)
 		{
 			Token = token;
 			Name = name;

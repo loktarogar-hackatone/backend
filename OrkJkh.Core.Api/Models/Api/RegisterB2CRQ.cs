@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OrkJkh.Core.Api.Models.Api
 {
-	public class RegisterRQ
+	public class RegisterB2CRQ
 	{
 		[Required]
 		public string FullName { get; set; }

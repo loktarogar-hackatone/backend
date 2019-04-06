@@ -36,7 +36,7 @@ namespace OrkJkh.Core.Api.Controllers
 
 		[HttpPost("register/b2c")]
 		[AllowAnonymous]
-		public async Task<IActionResult> Register([FromBody] RegisterRQ request)
+		public async Task<IActionResult> Register([FromBody] RegisterB2CRQ request)
 		{
 			var user = new AppUser();
 			user.Email = request.Email;
@@ -52,8 +52,8 @@ namespace OrkJkh.Core.Api.Controllers
 				await _signInManager.SignInAsync(user, false);
 				var token = GenerateJSONWebToken(user);
 
-				var rootData = new RegisterRS(token, user.Email);
-				return Created("api/auth/register", rootData);
+				var rootData = new RegisterB2CRS(token, user.Email);
+				return Created("api/auth/register/b2c", rootData);
 			}
 
 			return BadRequest();
