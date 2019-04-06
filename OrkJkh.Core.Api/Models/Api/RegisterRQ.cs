@@ -5,10 +5,7 @@ namespace OrkJkh.Core.Api.Models.Api
 	public class RegisterRQ
 	{
 		[Required]
-		public string FirstName { get; set; }
-
-		[Required]
-		public string SecondName { get; set; }
+		public string FullName { get; set; }
 
 		[Required]
 		public string Email { get; set; }
@@ -16,8 +13,11 @@ namespace OrkJkh.Core.Api.Models.Api
 		[Required]
 		public string Password { get; set; }
 
+		[Required]
+		public string Phone { get; set; }
+
+		public string Appartament { get; set; }
+
 		public string BuildingId { get; set; }
-
-
 	}
 }

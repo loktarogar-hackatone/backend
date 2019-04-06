@@ -34,15 +34,16 @@ namespace OrkJkh.Core.Api.Controllers
             _configuration = configuration;
 		}
 
-		[HttpPost("register")]
+		[HttpPost("register/b2c")]
 		[AllowAnonymous]
 		public async Task<IActionResult> Register([FromBody] RegisterRQ request)
 		{
 			var user = new AppUser();
 			user.Email = request.Email;
-			user.FirstName = request.FirstName;
-			user.SecondName = request.SecondName;
+			user.FullName = request.FullName;
 			user.UserName = request.Email;
+			user.PhoneNumber = request.Phone;
+			user.Appartament = request?.Appartament;
 			user.BuildingId = request?.BuildingId;
 
 			var result = await _userManager.CreateAsync(user, request.Password);

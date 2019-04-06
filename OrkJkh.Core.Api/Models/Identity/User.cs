@@ -9,9 +9,9 @@ namespace OrkJkh.Core.Api.Models.Identity
 
 	public class AppUser : MongoUser
 	{
-		public string FirstName { get; set; }
+		public string FullName { get; set; }
 
-		public string SecondName { get; set; }
+		public string Appartament { get; set }
 
 		public string BuildingId { get; set; }
 	}
