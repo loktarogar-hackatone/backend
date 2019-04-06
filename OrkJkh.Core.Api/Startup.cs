@@ -43,7 +43,7 @@ namespace OrkJkh.Core.Api
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 			app.UseMvc();
 		}
 	}
