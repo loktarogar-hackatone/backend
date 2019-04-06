@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
@@ -20,6 +21,7 @@ namespace OrkJkh.Core.Api.Controllers
 			_collection = database.GetCollection<MongoTestDto>("items");
 		}
 
+		[AllowAnonymous]
 		[HttpGet("insert")]
 		public async Task<IActionResult> Insert(string item)
 		{
@@ -27,6 +29,7 @@ namespace OrkJkh.Core.Api.Controllers
 			return Ok();
 		}
 
+		[AllowAnonymous]
 		[HttpGet("getall")]
 		public async Task<IActionResult> GetThemAll()
 		{
