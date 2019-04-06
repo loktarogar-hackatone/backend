@@ -19,6 +19,11 @@ namespace OrkJkh.Core.Api.Models.Identity
 		public string Inn { get; set; }
 
 		public UserEnum UserType { get; set; } = UserEnum.B2C;
+
+		public bool IsB2B()
+		{
+			return UserType == UserEnum.B2B ? true : false;
+		}
 	}
 
 	public enum UserEnum
