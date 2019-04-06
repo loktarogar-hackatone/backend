@@ -67,6 +67,7 @@ namespace OrkJkh.Core.Api.Controllers
 			user.Email = request.Email;
 			user.UserName = request.Email;
 			user.Inn = request.Inn;
+			user.UserType = UserEnum.B2B;
 
 			var result = await _userManager.CreateAsync(user, request.Password);
 			if (result.Succeeded)
