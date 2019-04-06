@@ -60,7 +60,7 @@ namespace OrkJkh.Core.Api.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpPost("login")]
+		[HttpPost("login/b2c")]
 		public async Task<IActionResult> Login([FromBody] LoginRQ request)
 		{
 			var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);

@@ -14,6 +14,8 @@ namespace OrkJkh.Core.Api.Models.Api
 
 		public string Phone { get; set; }
 
+		public string UserType { get; set; }
+
 		public UserDataRS(AppUser user)
 		{
 			FullName = user.FullName;
@@ -21,6 +23,7 @@ namespace OrkJkh.Core.Api.Models.Api
 			Phone = user.PhoneNumber;
 			Email = user.Email;
 			BuildingId = user.BuildingId;
+			UserType = user.UserType == UserEnum.B2C ? "B2C" : "B2B";
 		}
 	}
 }

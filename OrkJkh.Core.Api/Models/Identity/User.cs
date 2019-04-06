@@ -15,10 +15,10 @@ namespace OrkJkh.Core.Api.Models.Identity
 
 		public string BuildingId { get; set; }
 
-		public UserType UserType { get; set; } = UserType.B2C;
+		public UserEnum UserType { get; set; } = UserEnum.B2C;
 	}
 
-	public enum UserType
+	public enum UserEnum
 	{
 		B2C,
 		B2B
