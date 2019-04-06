@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="MongoDB.Bson, Version=2.8.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\..\..\Users\plpn\.nuget\packages\mongodb.bson\2.8.0\lib\netstandard1.5\MongoDB.Bson.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
