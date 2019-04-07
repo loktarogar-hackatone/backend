@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using OrkJkh.Core.Api.Models.Api;
 using OrkJkh.Core.Api.Models.Identity;
@@ -127,8 +128,12 @@ namespace OrkJkh.Core.Api.Controllers
 			{
 				foreach (var buildId in user.BuildingIds)
 				{
-					var buildRaw = await _buildings.Find(x => x.id == buildId).FirstAsync();
-					var mcRaw = await _mc.Find(x => x.id == buildRaw.management_organization_id).FirstAsync();
+					var filter = Builders<HouseDto>.Filter.Eq("_id", new ObjectId(buildId));
+					var buildRaw = (await _buildings.Find(filter).ToListAsync()).FirstOrDefault();
+					if (buildRaw == null) continue;
+					
+					var mcRaw = (await _mc.Find(x => x.id == buildRaw.management_organization_id).ToListAsync()).FirstOrDefault();
+					if (mcRaw == null) continue;
 
 					buildData.Add(buildId, new BuildInfo { Address = buildRaw.address, ManagementCompany = mcRaw.name_short });
 				}
