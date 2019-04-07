@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using OrkJkh.Core.Api.Models.Api;
 using OrkJkh.Core.Api.Models.Identity;
 
@@ -24,6 +25,7 @@ namespace OrkJkh.Core.Api.Controllers
 		private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
+		//private readonly
 		
 		public AuthController(UserManager<AppUser> userManager, 
 				SignInManager<AppUser> signInManager, 
@@ -32,6 +34,10 @@ namespace OrkJkh.Core.Api.Controllers
 			_userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+
+			// var client = new MongoClient(configuration["MongoConnectionString"]);
+			// var database = client.GetDatabase("orkjkh");
+			// _collection = database.GetCollection<MongoTestDto>("items");
 		}
 
 		[HttpPost("register/b2c")]
@@ -73,6 +79,8 @@ namespace OrkJkh.Core.Api.Controllers
 			user.UserName = request.Email;
 			user.Inn = request.Inn;
 			user.UserType = UserEnum.B2B;
+			user.PhoneNumber = request.Phone;
+			user.FullName = request.FullName;
 
 			var result = await _userManager.CreateAsync(user, request.Password);
 			if (result.Succeeded)
@@ -110,6 +118,8 @@ namespace OrkJkh.Core.Api.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 			
+			var buildings = await
+
             var userData = new UserDataRS(user);
 
             return Ok(userData);
