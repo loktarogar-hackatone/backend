@@ -61,13 +61,6 @@ namespace OrkJkh.Core.Api.Controllers
 			return Ok();
 		}
 		
-		[HttpGet("all")]
-		public async Task<IActionResult> GetAll()
-		{
-			List<DataDto> data = await _collection.Find(_ => true).ToListAsync();
-			return Ok(data);
-		}
-		
 		[HttpGet("meter")]
 		public async Task<IActionResult> GetMeter(uint uniqueIdentifier, string startDate, string endDate)
 		{
@@ -105,6 +98,7 @@ namespace OrkJkh.Core.Api.Controllers
 			var meterIds = _userManager
 				.Users
 				.Where(u => u.BuildingIds != null && u.BuildingIds.Contains(buildingId))
+				.Where(u => u.MeterIds != null)
 				.SelectMany(u => u.MeterIds)
 				.ToList();
 			
