@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrkJkh.ConsoleCSVParser", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedModels", "SharedModels\SharedModels.csproj", "{2495B4AC-46B5-4395-A86C-B0B2D6296389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeterDataEmulator", "MeterDataEmulator\MeterDataEmulator.csproj", "{C3610C5B-679E-4887-A8B8-2A0D38D03C71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{2495B4AC-46B5-4395-A86C-B0B2D6296389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2495B4AC-46B5-4395-A86C-B0B2D6296389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2495B4AC-46B5-4395-A86C-B0B2D6296389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3610C5B-679E-4887-A8B8-2A0D38D03C71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3610C5B-679E-4887-A8B8-2A0D38D03C71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3610C5B-679E-4887-A8B8-2A0D38D03C71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3610C5B-679E-4887-A8B8-2A0D38D03C71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
