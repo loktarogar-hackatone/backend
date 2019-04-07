@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using OrkJkh.Core.Api.Models;
+using OrkJkh.Core.Api.Models.Identity;
 using Remotion.Linq.Clauses;
 
 namespace OrkJkh.Core.Api.Controllers
@@ -24,12 +26,16 @@ namespace OrkJkh.Core.Api.Controllers
 		
 		private readonly IMongoCollection<DataDto> _collection;
 
+		private readonly UserManager<AppUser> _userManager;
+
 		
-		public DataReceiverController(IConfiguration config)
+		public DataReceiverController(UserManager<AppUser> userManager, IConfiguration config)
 		{
 			var client = new MongoClient(config["MongoConnectionString"]);
 			var database = client.GetDatabase("orkjkh");
+			
 			_collection = database.GetCollection<DataDto>("data");
+			_userManager = userManager;
 		}
 
 		
@@ -84,6 +90,44 @@ namespace OrkJkh.Core.Api.Controllers
 					InsertionDateTime = g.Key.ToString(DATE_FORMAT, CultureInfo.InvariantCulture),
 					Value = g.Sum(e => e.Value)
 				});
+			
+			return Ok(data);
+		}
+		
+		[HttpGet("house")]
+		public async Task<IActionResult> GetByHouse(
+			string buildingId, 
+			string startDate, 
+			string endDate, 
+			MeasurementType measurementType)
+		{
+			var meterIds = _userManager
+				.Users
+				.Where(u => u.BuildingIds != null && u.BuildingIds.Contains(buildingId))
+				.SelectMany(u => u.MeterIds)
+				.ToList();
+			
+			var startDt = ParseDateTimeAsUtc(startDate, DATE_FORMAT).Date;
+			var endDt = ParseDateTimeAsUtc(endDate, DATE_FORMAT).Date;
+
+			FilterDefinition<DataDto> filter = Builders<DataDto>.Filter.Where(d =>
+				d.MeasurementType == measurementType &&
+				meterIds.Contains(d.UniqueIdentifier) &&
+				d.InsertionDate >= startDt &&
+				d.InsertionDate <= endDt);
+			
+			List<DataDto> rawData = await _collection
+				.Find(filter)
+				.ToListAsync();
+
+			var data = rawData
+				.GroupBy(d => d.InsertionDate)
+				.Select(g => new
+				{
+					InsertionDateTime = g.Key.ToString(DATE_FORMAT, CultureInfo.InvariantCulture),
+					Value = g.Sum(e => e.Value)
+				});
+			
 			
 			return Ok(data);
 		}
