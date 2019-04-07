@@ -15,14 +15,17 @@ namespace OrkJkh.Core.Api.Models.Identity
 		public string Appartament { get; set; }
 
 		public List<string> BuildingIds { get; set; }
+		
+		public List<uint> MeterIds { get; set; }
 
 		public string Inn { get; set; }
 
 		public UserEnum UserType { get; set; } = UserEnum.B2C;
 
+		
 		public bool IsB2B()
 		{
-			return UserType == UserEnum.B2B ? true : false;
+			return UserType == UserEnum.B2B;
 		}
 	}
 

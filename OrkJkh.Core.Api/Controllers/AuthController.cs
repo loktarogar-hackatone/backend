@@ -12,8 +12,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using OrkJkh.Core.Api.Models.Api;
 using OrkJkh.Core.Api.Models.Identity;
+using SharedModels;
 
 namespace OrkJkh.Core.Api.Controllers
 {
@@ -24,6 +27,8 @@ namespace OrkJkh.Core.Api.Controllers
 		private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
+		private readonly IMongoCollection<HouseDto> _buildings;
+		private readonly IMongoCollection<ManagementCompanyDto> _mc;
 		
 		public AuthController(UserManager<AppUser> userManager, 
 				SignInManager<AppUser> signInManager, 
@@ -32,6 +37,12 @@ namespace OrkJkh.Core.Api.Controllers
 			_userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+
+			var client = new MongoClient(configuration["MongoConnectionString"]);
+			var database = client.GetDatabase("orkjkh");
+
+			_buildings = database.GetCollection<HouseDto>("house_data");
+			_mc = database.GetCollection<ManagementCompanyDto>("managementcompany_data");
 		}
 
 		[HttpPost("register/b2c")]
@@ -73,6 +84,8 @@ namespace OrkJkh.Core.Api.Controllers
 			user.UserName = request.Email;
 			user.Inn = request.Inn;
 			user.UserType = UserEnum.B2B;
+			user.PhoneNumber = request.Phone;
+			user.FullName = request.FullName;
 
 			var result = await _userManager.CreateAsync(user, request.Password);
 			if (result.Succeeded)
@@ -110,7 +123,24 @@ namespace OrkJkh.Core.Api.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 			
+			var buildData = new Dictionary<string, BuildInfo>();
+			if (user.BuildingIds != null && user.BuildingIds.Count > 0)
+			{
+				foreach (var buildId in user.BuildingIds)
+				{
+					var filter = Builders<HouseDto>.Filter.Eq("_id", new ObjectId(buildId));
+					var buildRaw = (await _buildings.Find(filter).ToListAsync()).FirstOrDefault();
+					if (buildRaw == null) continue;
+					
+					var mcRaw = (await _mc.Find(x => x.id == buildRaw.management_organization_id).ToListAsync()).FirstOrDefault();
+					if (mcRaw == null) continue;
+
+					buildData.Add(buildId, new BuildInfo { Address = buildRaw.address, ManagementCompany = mcRaw.name_short });
+				}
+			}
+
             var userData = new UserDataRS(user);
+			userData.BuildData = buildData;
 
             return Ok(userData);
         }
@@ -138,5 +168,12 @@ namespace OrkJkh.Core.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         } 
+	}
+
+	public class BuildInfo
+	{
+		public string Address { get; set; }
+		
+		public string ManagementCompany { get; set; }
 	}
 }
