@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -53,7 +54,15 @@ namespace OrkJkh.Core.Api.Controllers
 		{
 			var user = await _userManager.GetUserAsync(User);
 
-			var rawData = await _collection.Find(x => x.Owner == user.Email).ToListAsync();
+			var emails = _userManager.Users.Where(u => u.BuildingIds.Contains(buildingId)).Select(u => u.Email).ToList();
+
+			foreach (var mail in emails)
+			{
+				var rawData = await _collection.Find(x => x.Owner == user.Email).ToListAsync();
+			}
+
+			
+			
 
 			return Ok(rawData);
 		}
