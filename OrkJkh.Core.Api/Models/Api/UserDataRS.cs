@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using OrkJkh.Core.Api.Controllers;
 using OrkJkh.Core.Api.Models.Identity;
 
 namespace OrkJkh.Core.Api.Models.Api
@@ -24,6 +25,8 @@ namespace OrkJkh.Core.Api.Models.Api
 
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string Inn { get; set; }
+
+		public Dictionary<string, BuildInfo> BuildData { get; set; }
 
 		public UserDataRS(AppUser user)
 		{

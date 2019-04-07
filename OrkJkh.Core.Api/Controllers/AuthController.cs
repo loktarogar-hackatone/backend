@@ -26,7 +26,8 @@ namespace OrkJkh.Core.Api.Controllers
 		private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
-		private readonly IMongoCollection<HouseDto> _collection;
+		private readonly IMongoCollection<HouseDto> _buildings;
+		private readonly IMongoCollection<ManagementCompanyDto> _mc;
 		
 		public AuthController(UserManager<AppUser> userManager, 
 				SignInManager<AppUser> signInManager, 
@@ -38,7 +39,9 @@ namespace OrkJkh.Core.Api.Controllers
 
 			var client = new MongoClient(configuration["MongoConnectionString"]);
 			var database = client.GetDatabase("orkjkh");
-			_collection = database.GetCollection<HouseDto>("house_data");
+
+			_buildings = database.GetCollection<HouseDto>("house_data");
+			_mc = database.GetCollection<ManagementCompanyDto>("managementcompany_data");
 		}
 
 		[HttpPost("register/b2c")]
@@ -119,9 +122,17 @@ namespace OrkJkh.Core.Api.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 			
-			//var buildings = await _collection
+			var buildData = new Dictionary<string, BuildInfo>();
+			foreach (var buildId in user.BuildingIds)
+			{
+				var buildRaw = await _buildings.Find(x => x.id == buildId).FirstAsync();
+				var mcRaw = await _mc.Find(x => x.id == buildRaw.management_organization_id).FirstAsync();
+
+				buildData.Add(buildId, new BuildInfo { Address = buildRaw.address, ManagementCompany = mcRaw.name_short });
+			}
 
             var userData = new UserDataRS(user);
+			userData.BuildData = buildData;
 
             return Ok(userData);
         }
@@ -149,5 +160,12 @@ namespace OrkJkh.Core.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         } 
+	}
+
+	public class BuildInfo
+	{
+		public string Address { get; set; }
+		
+		public string ManagementCompany { get; set; }
 	}
 }
