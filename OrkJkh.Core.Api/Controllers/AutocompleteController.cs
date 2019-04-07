@@ -39,7 +39,7 @@ namespace OrkJkh.Core.Api.Controllers
 		{
 			if (address.Length < 3)
 			{
-				return Ok();
+				return Ok(new List<object>());
 			}
 
 			string normalizedAddress = NormalizeAddress(address)
