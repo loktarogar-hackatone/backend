@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using OrkJkh.Core.Api.Models.Api;
 using OrkJkh.Core.Api.Models.Identity;
+using SharedModels;
 
 namespace OrkJkh.Core.Api.Controllers
 {
@@ -25,7 +26,7 @@ namespace OrkJkh.Core.Api.Controllers
 		private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _configuration;
-		//private readonly
+		private readonly IMongoCollection<HouseDto> _collection;
 		
 		public AuthController(UserManager<AppUser> userManager, 
 				SignInManager<AppUser> signInManager, 
@@ -35,9 +36,9 @@ namespace OrkJkh.Core.Api.Controllers
             _signInManager = signInManager;
             _configuration = configuration;
 
-			// var client = new MongoClient(configuration["MongoConnectionString"]);
-			// var database = client.GetDatabase("orkjkh");
-			// _collection = database.GetCollection<MongoTestDto>("items");
+			var client = new MongoClient(configuration["MongoConnectionString"]);
+			var database = client.GetDatabase("orkjkh");
+			_collection = database.GetCollection<HouseDto>("house_data");
 		}
 
 		[HttpPost("register/b2c")]
@@ -118,7 +119,7 @@ namespace OrkJkh.Core.Api.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 			
-			//var buildings = await
+			//var buildings = await _collection
 
             var userData = new UserDataRS(user);
 

@@ -27,7 +27,7 @@ namespace OrkJkh.Core.Api.Models.Api
 
 		public UserDataRS(AppUser user)
 		{
-			FullName = user.UserName;
+			FullName = user.FullName;
 			Appartament = user.Appartament;
 			Phone = user.PhoneNumber;
 			Email = user.Email;
