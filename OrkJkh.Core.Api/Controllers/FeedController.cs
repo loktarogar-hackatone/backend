@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using OrkJkh.Core.Api.Models.Identity;
 
@@ -42,6 +44,7 @@ namespace OrkJkh.Core.Api.Controllers
 				Owner = user.Email,
 				Text = request.Text,
 				CreateDate = DateTime.Now,
+				BuildingId = request.BuildingId,
 			};
 
 			await _collection.InsertOneAsync(eventRec);
@@ -55,20 +58,19 @@ namespace OrkJkh.Core.Api.Controllers
 		{
 			var user = await _userManager.GetUserAsync(User);
 
-			var users = _userManager.Users.ToList().Where(u => u.BuildingIds.Contains(buildingId));
-			var emails = users.Select(u => u.Email);
-
 			var feedEvents = new List<EventRecord>();
 
-			foreach (var mail in emails)
+			var filter = Builders<EventRecord>.Filter.Eq(x => x.BuildingId, buildingId);
+			var eventsRaw = await _collection.Find(filter).ToListAsync();
+
+			foreach (var eventRec in eventsRaw)
 			{
-				var filter = Builders<EventRecord>.Filter.Eq(x => x.Owner, mail);
-				var rawData = await _collection.Find(x => x.Owner == user.Email).ToListAsync();
-				feedEvents.Add(new EventRecord
+				feedEvents.Add(new EventRecord 
 				{
+					BuildingId = eventRec.BuildingId,
 					Owner = user.FullName,
-					Text = rawData.FirstOrDefault()?.Text,
-					CreateDate = rawData.First().CreateDate,
+					Text = eventRec.Text,
+					CreateDate = eventRec.CreateDate,
 				});
 			}
 			
@@ -78,9 +80,15 @@ namespace OrkJkh.Core.Api.Controllers
 
 	public class EventRecord
 	{
+		[BsonId]
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string Id { get; set; }
+
 		public string Owner { get; set; }
 
 		public string Text { get; set; }
+
+		public string BuildingId { get; set; }
 
 		public DateTime CreateDate { get; set; }
 	}
@@ -89,6 +97,9 @@ namespace OrkJkh.Core.Api.Controllers
 	{
 		// [Required]
 		// public string Owner { get; set; }
+
+		[Required]
+		public string BuildingId { get; set; }
 
 		[Required]
 		public string Text { get; set; }
