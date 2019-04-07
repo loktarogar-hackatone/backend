@@ -118,7 +118,7 @@ namespace OrkJkh.Core.Api.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 			
-			var buildings = await
+			//var buildings = await
 
             var userData = new UserDataRS(user);
 
