@@ -24,6 +24,7 @@ namespace OrkJkh.Core.Api.Controllers
 		}
 
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[HttpGet("add")]
 		public async Task<IActionResult> AddBuilding(string buildingId)
 		{
 			var user = await _userManager.GetUserAsync(User);
