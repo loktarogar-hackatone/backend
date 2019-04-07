@@ -123,12 +123,15 @@ namespace OrkJkh.Core.Api.Controllers
             var user = await _userManager.GetUserAsync(User);
 			
 			var buildData = new Dictionary<string, BuildInfo>();
-			foreach (var buildId in user.BuildingIds)
+			if (user.BuildingIds != null && user.BuildingIds.Count > 0)
 			{
-				var buildRaw = await _buildings.Find(x => x.id == buildId).FirstAsync();
-				var mcRaw = await _mc.Find(x => x.id == buildRaw.management_organization_id).FirstAsync();
+				foreach (var buildId in user.BuildingIds)
+				{
+					var buildRaw = await _buildings.Find(x => x.id == buildId).FirstAsync();
+					var mcRaw = await _mc.Find(x => x.id == buildRaw.management_organization_id).FirstAsync();
 
-				buildData.Add(buildId, new BuildInfo { Address = buildRaw.address, ManagementCompany = mcRaw.name_short });
+					buildData.Add(buildId, new BuildInfo { Address = buildRaw.address, ManagementCompany = mcRaw.name_short });
+				}
 			}
 
             var userData = new UserDataRS(user);
