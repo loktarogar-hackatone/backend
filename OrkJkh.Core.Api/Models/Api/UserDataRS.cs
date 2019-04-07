@@ -28,6 +28,8 @@ namespace OrkJkh.Core.Api.Models.Api
 
 		public Dictionary<string, BuildInfo> BuildData { get; set; }
 
+		public List<uint> Meters { get; set; }
+
 		public UserDataRS(AppUser user)
 		{
 			FullName = user.FullName;
@@ -36,6 +38,7 @@ namespace OrkJkh.Core.Api.Models.Api
 			Email = user.Email;
 			BuildingIds = user.BuildingIds;
 			Inn = user.Inn;
+			Meters = user.MeterIds;
 			UserType = user.UserType == UserEnum.B2C ? "B2C" : "B2B";
 		}
 	}
