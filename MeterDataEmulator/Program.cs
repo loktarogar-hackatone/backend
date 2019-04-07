@@ -7,9 +7,18 @@ namespace MeterDataEmulator
 {
 	class Program
 	{
-		private static IReadOnlyCollection<uint> METER_UNIQUE_IDS = new List<uint>
+		private static IReadOnlyDictionary<uint, byte> METERS = new Dictionary<uint, byte>
 		{
-			0//, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+			{ 0, 0 },
+			{ 1, 0 },
+			{ 2, 1 },
+			{ 3, 1 },
+			{ 4, 2 },
+			{ 5, 2 },
+			{ 6, 0 },
+			{ 7, 3 },
+			{ 8, 3 },
+			{ 9, 2 },
 		};
 		
 		static void Main(string[] args)
@@ -22,23 +31,25 @@ namespace MeterDataEmulator
 			{
 				httpClient.BaseAddress = new Uri(args[0]);
 				
-				foreach (var meterUniqueId in METER_UNIQUE_IDS)
+				foreach (var meter in METERS)
 				{
-					int value = 0;
+					int value = random.Next(0, 30);
 					var totalHours = (int)TimeSpan.FromDays(100).TotalHours;
+					var minValue = random.Next(0, 10);
+					var maxValue = random.Next(20, 70);
 
 					for (int i = 0; i < totalHours; i += 4)
 					{
 						Console.WriteLine(DateTime.Now.AddHours(i));
 						
 						httpClient.GetAsync(
-							$"?uniqueIdentifier={meterUniqueId}" +
+							$"?uniqueIdentifier={meter.Key}" +
 							$"&value={value}" +
-							$"&measurementType={0}" +
+							$"&measurementType={meter.Value}" +
 							$"&dateTime={DateTime.Now.AddHours(i).ToString("dd.MM.yyyyTHH:mm:ss", CultureInfo.InvariantCulture)}")
 							.GetAwaiter()
 							.GetResult();
-						value += random.Next(1, 30);
+						value += random.Next(minValue, maxValue);
 					}
 				}
 			}

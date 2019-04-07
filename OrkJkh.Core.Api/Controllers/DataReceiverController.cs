@@ -88,7 +88,8 @@ namespace OrkJkh.Core.Api.Controllers
 				.Select(g => new
 				{
 					InsertionDateTime = g.Key.ToString(DATE_FORMAT, CultureInfo.InvariantCulture),
-					Value = g.Sum(e => e.Value)
+					Value = g.Sum(e => e.Value),
+					MeasurementType = g.First().MeasurementType
 				});
 			
 			return Ok(data);

@@ -31,7 +31,7 @@ namespace OrkJkh.Core.Api.Controllers
 		}
 
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		[HttpPost("addmeter")]
+		[HttpGet("addmeter")]
 		public async Task<IActionResult> AddMeter(uint meterId)
 		{
 			var user = await _userManager.GetUserAsync(User);
