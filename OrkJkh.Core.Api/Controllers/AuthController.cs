@@ -165,11 +165,11 @@ namespace OrkJkh.Core.Api.Controllers
 
 					if (feedEvents.Count > 0)
 					{
-						if (userData.Feed == null) userData.Feed = new Dictionary<string, EventRecord>();
+						if (userData.Feed == null) userData.Feed = new List<EventRecord>();
 
 						foreach (var feedEnv in feedEvents)
 						{
-							userData.Feed.Add(feedEnv.BuildingId, feedEnv);
+							userData.Feed.Add(feedEnv);
 						}
 					}
 				}

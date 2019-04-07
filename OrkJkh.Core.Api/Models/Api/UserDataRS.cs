@@ -30,7 +30,7 @@ namespace OrkJkh.Core.Api.Models.Api
 
 		public List<uint> Meters { get; set; }
 
-		public Dictionary<string, EventRecord> Feed { get; set; }
+		public List<EventRecord> Feed { get; set; }
 
 		public UserDataRS(AppUser user)
 		{
