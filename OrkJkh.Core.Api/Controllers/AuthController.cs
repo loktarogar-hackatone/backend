@@ -29,6 +29,7 @@ namespace OrkJkh.Core.Api.Controllers
         private readonly IConfiguration _configuration;
 		private readonly IMongoCollection<HouseDto> _buildings;
 		private readonly IMongoCollection<ManagementCompanyDto> _mc;
+		private readonly IMongoCollection<EventRecord> _events;
 		
 		public AuthController(UserManager<AppUser> userManager, 
 				SignInManager<AppUser> signInManager, 
@@ -43,6 +44,7 @@ namespace OrkJkh.Core.Api.Controllers
 
 			_buildings = database.GetCollection<HouseDto>("house_data");
 			_mc = database.GetCollection<ManagementCompanyDto>("managementcompany_data");
+			_events = database.GetCollection<EventRecord>("events");
 		}
 
 		[HttpPost("register/b2c")]
@@ -139,8 +141,39 @@ namespace OrkJkh.Core.Api.Controllers
 				}
 			}
 
-            var userData = new UserDataRS(user);
+			var userData = new UserDataRS(user);
 			userData.BuildData = buildData;
+
+			if (user.BuildingIds != null && user.BuildingIds.Count > 0)
+			{
+				foreach (var buildId in user.BuildingIds)
+				{
+					var feedEvents = new List<EventRecord>();
+					var filterBuilds = Builders<EventRecord>.Filter.Eq(x => x.BuildingId, buildId);
+					var eventsRaw = await _events.Find(filterBuilds).ToListAsync();
+
+					foreach (var eventRec in eventsRaw)
+					{
+						feedEvents.Add(new EventRecord 
+						{
+							BuildingId = eventRec.BuildingId,
+							Owner = user.FullName,
+							Text = eventRec.Text,
+							CreateDate = eventRec.CreateDate,
+						});
+					}
+
+					if (feedEvents.Count > 0)
+					{
+						if (userData.Feed == null) userData.Feed = new Dictionary<string, EventRecord>();
+
+						foreach (var feedEnv in feedEvents)
+						{
+							userData.Feed.Add(feedEnv.BuildingId, feedEnv);
+						}
+					}
+				}
+			}
 
             return Ok(userData);
         }
