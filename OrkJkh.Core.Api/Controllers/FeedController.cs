@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
@@ -56,15 +57,20 @@ namespace OrkJkh.Core.Api.Controllers
 
 			var emails = _userManager.Users.Where(u => u.BuildingIds.Contains(buildingId)).Select(u => u.Email).ToList();
 
+			var feedEvents = new List<EventRecord>();
+
 			foreach (var mail in emails)
 			{
 				var rawData = await _collection.Find(x => x.Owner == user.Email).ToListAsync();
+				feedEvents.Add(new EventRecord
+				{
+					Owner = user.FullName,
+					Text = rawData.FirstOrDefault()?.Text,
+					CreateDate = rawData.First().CreateDate,
+				});
 			}
-
 			
-			
-
-			return Ok(rawData);
+			return Ok(feedEvents);
 		}
 	}
 
