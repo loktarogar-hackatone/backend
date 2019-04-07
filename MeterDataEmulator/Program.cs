@@ -36,7 +36,7 @@ namespace MeterDataEmulator
 					int value = random.Next(0, 30);
 					var totalHours = (int)TimeSpan.FromDays(100).TotalHours;
 					var minValue = random.Next(0, 10);
-					var maxValue = random.Next(20, 70);git
+					var maxValue = random.Next(20, 70);
 
 					for (int i = 0; i < totalHours; i += 4)
 					{
