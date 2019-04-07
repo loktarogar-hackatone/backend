@@ -29,7 +29,7 @@ namespace OrkJkh.Core.Api.Controllers
 
 			var client = new MongoClient(configuration["MongoConnectionString"]);
 			var database = client.GetDatabase("orkjkh");
-			_collection = database.GetCollection<EventRecord>("items");
+			_collection = database.GetCollection<EventRecord>("events");
 		}
 
 		[HttpPost("new")]
@@ -55,12 +55,14 @@ namespace OrkJkh.Core.Api.Controllers
 		{
 			var user = await _userManager.GetUserAsync(User);
 
-			var emails = _userManager.Users.Where(u => u.BuildingIds.Contains(buildingId)).Select(u => u.Email).ToList();
+			var users = _userManager.Users.ToList().Where(u => u.BuildingIds.Contains(buildingId));
+			var emails = users.Select(u => u.Email);
 
 			var feedEvents = new List<EventRecord>();
 
 			foreach (var mail in emails)
 			{
+				var filter = Builders<EventRecord>.Filter.Eq(x => x.Owner, mail);
 				var rawData = await _collection.Find(x => x.Owner == user.Email).ToListAsync();
 				feedEvents.Add(new EventRecord
 				{
